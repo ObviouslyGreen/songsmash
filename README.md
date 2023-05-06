@@ -38,3 +38,8 @@ Some random youtube links I've been testing with
 * [What's Up](https://www.youtube.com/watch?v=B6GdsRIbTSk)
 * [Creep](https://www.youtube.com/watch?v=zFYEYRcjK2g)
 * [Creep acoustic](https://youtu.be/4BX5xpB2DBM)
+
+Main libraries used:
+* [youtube-dl](https://github.com/ytdl-org/youtube-dl/tree)
+* [demucs](https://github.com/facebookresearch/demucs)
+* [so-vits-svc-fork](https://github.com/voicepaw/so-vits-svc-fork)
