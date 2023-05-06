@@ -23,6 +23,7 @@ This project is all a giant hack to have some fun, not intended to be used in an
 * Tools to slice together different parts of output since some f0 methods perform better in certain parts?
 * Proper logging
 * Test with gpu, since mainly have ran stuff on intel based mac
+* Debug why so-vits-svc-fork has issues spliting up silent vs nonsilent chunks for mp3 files (wav works fine usually)
 
 ## Models
 Models live in the models directory, a config.json is expected and .pth files for the models themselves. Can find models on [Hugging Face](https://huggingface.co/)
