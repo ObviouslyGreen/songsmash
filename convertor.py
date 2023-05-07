@@ -10,7 +10,7 @@ MODEL_PATH = 'models'
 MODELS = {
     'kanye': Model('aimodel', os.path.join(MODEL_PATH, 'kanye')),
     'obama': Model('Obama', os.path.join(MODEL_PATH, 'obama')),
-    'trump': Model('Trump', os.path.join(MODEL_PATH, 'trump')),
+    'trump': Model('trump', os.path.join(MODEL_PATH, 'trump')),
     'biden': Model('Biden', os.path.join(MODEL_PATH, 'biden')),
     'tswift': Model('taylor', os.path.join(MODEL_PATH, 'tswift'))
 }
