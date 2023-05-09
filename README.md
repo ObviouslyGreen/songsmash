@@ -18,7 +18,7 @@ This project is all a giant hack to have some fun, not intended to be used in an
 * Figure out why crepe and crepe lite no work on my mac
 * Dockerize to make setup and running easier / install docs
 * Make directories and temp work folders better
-* Auto transpose for things out of normal vocal range of model?
+* Clean up vocal tracks with extra filters
 * CLI tool / web frontend instead of script
 * Tools to slice together different parts of output since some f0 methods perform better in certain parts?
 * Proper logging
