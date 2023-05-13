@@ -30,7 +30,7 @@ def main():
     if not f0_method:
         f0_method = 'all'
 
-    transpose = input('Transpose (steps)?: ')
+    transpose = input('Transpose (half steps)?: ')
 
     if not os.path.exists(project_root):
         os.makedirs(project_root)
