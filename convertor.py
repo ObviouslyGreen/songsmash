@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shlex
+import shutil
 
 from collections import namedtuple
 
@@ -14,14 +15,20 @@ MODELS = {
     'biden': Model('Biden', os.path.join(MODEL_PATH, 'biden')),
     'tswift': Model('taylor', os.path.join(MODEL_PATH, 'tswift'))
 }
-F0_METHODS = ['dio', 'parselmouth', 'harvest']
-SVC_BIN_PATH = '/Users/shibo/.pyenv/shims/svc'
+F0_METHODS = ['dio', 'parselmouth', 'harvest', 'crepe']
+DEFAULT_F0_METHODS = F0_METHODS.remove('crepe')
+
 
 class VoiceConvertor:
-    def __init__(self, f0_method='dio', auto_predict=False):
+    def __init__(self, f0_method='dio', auto_predict=False, transpose=0):
+        self.svc_path = shutil.which('svc')
+        if not self.svc_path:
+            raise ValueError('Cannot find svc executable in path')
+
         self.models = MODELS
         self.auto_predict = auto_predict
         self.f0_method = f0_method if f0_method else 'dio'
+        self.transpose = transpose
 
     def convert(self, model, vocals_path):
         if model not in self.models:
@@ -34,6 +41,8 @@ class VoiceConvertor:
             filename = 'na_' + filename
         if self.f0_method != 'dio':
             filename = f'{self.f0_method}_{filename}'
+        if self.transpose != 0:
+            filename = f't{self.transpose}_{filename}'
         converted_path = os.path.join(path, f'{model}_{filename}')
         if os.path.exists(converted_path):
             return converted_path
@@ -42,7 +51,17 @@ class VoiceConvertor:
         env = {
             'PYTORCH_ENABLE_MPS_FALLBACK': '1'
         }
-        subprocess.run(shlex.split(f'{SVC_BIN_PATH} infer {"-na" if not self.auto_predict else ""} -fm {self.f0_method} -s {m.speaker} -m {m.path} -c {os.path.join(m.path, "config.json")} {vocals_path}'), env=env)
+        subprocess.run(self._build_command(), env=env)
         os.rename(default_converted_path, converted_path)
 
         return converted_path
+    
+    def _build_command()
+        command = f'{self.svc_path} infer -fm {self.f0_method} -s {m.speaker} -m {m.path} -c {os.path.join(m.path, "config.json")} {vocals_path}')
+        if not self.auto_predict:
+            command += ' -na'
+        
+        if self.transpose != 0:
+            command += f' -t {self.transpse}'
+
+        return shlex.split(command)

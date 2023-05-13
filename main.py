@@ -1,7 +1,9 @@
 import os
 
+import audio
+import convertor
+
 from combiner import AudioCombiner
-from convertor import VoiceConvertor, MODELS, F0_METHODS
 from splitter import SongSplitter
 from youtube import AudioDownloader
 
@@ -17,7 +19,7 @@ def main():
         youtube_url = 'https://www.youtube.com/watch?v=S6XXDw0Mrck'
 
 
-    model = input(f'Please choose a model. Available models are {list(MODELS.keys())}: ')
+    model = input(f'Please choose a model. Available models are {list(convertor.MODELS.keys())}: ')
     if not model:
         model = 'kanye'
 
@@ -25,13 +27,14 @@ def main():
     if auto_predict == '':
         auto_predict = False
 
-    f0_method = input(f'f0 method? {F0_METHODS}: ')
+    f0_method = input(f'f0 method? {convertor.F0_METHODS}: ')
     if not f0_method:
         f0_method = 'all'
 
+    transpose = input('Transpose (steps)?: ')
+
     if not os.path.exists(project_root):
         os.makedirs(project_root)
-
 
     ad = AudioDownloader(project_root)
     audio_path = ad.download(youtube_url, project_name)
@@ -40,20 +43,23 @@ def main():
     vocals_path, no_vocals_path = s.split_vocals(audio_path)
 
     if f0_method == 'all':
-        methods = F0_METHODS
+        methods = convertor.DEFAULT_F0_METHODS
     else:
         methods = [f0_method]
 
     print(f'Running voice converter with f0_methods {methods} and auto predict {auto_predict}')
     for m in methods:
-        vc = VoiceConvertor(f0_method=m, auto_predict=auto_predict)
+        vc = convertor.VoiceConvertor(f0_method=m, auto_predict=auto_predict, transpose=transpose)
         converted_path = vc.convert(model, vocals_path)
 
-        ac = AudioCombiner()
+        if self.transpose != 0:
+            no_vocals_path = audio.transpose(no_vocals_path, transpose)
+
         combined_path = os.path.join(project_root, f'{project_name}_{model}_{m}{"_na" if not auto_predict else ""}.wav')
-        ac.combine(converted_path, no_vocals_path, combined_path)
+        audio.overlay_audio(converted_path, no_vocals_path, combined_path)
 
         print(f'Results saved to {combined_path}')
+
 
 if __name__ == '__main__':
     main()
