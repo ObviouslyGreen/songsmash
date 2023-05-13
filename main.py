@@ -1,9 +1,8 @@
 import os
 
 import audio
-import convertor
+import converter
 
-from combiner import AudioCombiner
 from splitter import SongSplitter
 from youtube import AudioDownloader
 
@@ -19,7 +18,7 @@ def main():
         youtube_url = 'https://www.youtube.com/watch?v=S6XXDw0Mrck'
 
 
-    model = input(f'Please choose a model. Available models are {list(convertor.MODELS.keys())}: ')
+    model = input(f'Please choose a model. Available models are {list(converter.MODELS.keys())}: ')
     if not model:
         model = 'kanye'
 
@@ -27,7 +26,7 @@ def main():
     if auto_predict == '':
         auto_predict = False
 
-    f0_method = input(f'f0 method? {convertor.F0_METHODS}: ')
+    f0_method = input(f'f0 method? {converter.F0_METHODS}: ')
     if not f0_method:
         f0_method = 'all'
 
@@ -43,16 +42,16 @@ def main():
     vocals_path, no_vocals_path = s.split_vocals(audio_path)
 
     if f0_method == 'all':
-        methods = convertor.DEFAULT_F0_METHODS
+        methods = converter.DEFAULT_F0_METHODS
     else:
         methods = [f0_method]
 
     print(f'Running voice converter with f0_methods {methods} and auto predict {auto_predict}')
     for m in methods:
-        vc = convertor.VoiceConvertor(f0_method=m, auto_predict=auto_predict, transpose=transpose)
+        vc = converter.VoiceConverter(f0_method=m, auto_predict=auto_predict, transpose=transpose)
         converted_path = vc.convert(model, vocals_path)
 
-        if self.transpose != 0:
+        if transpose != 0:
             no_vocals_path = audio.transpose(no_vocals_path, transpose)
 
         combined_path = os.path.join(project_root, f'{project_name}_{model}_{m}{"_na" if not auto_predict else ""}.wav')

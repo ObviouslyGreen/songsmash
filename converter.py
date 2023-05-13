@@ -15,11 +15,11 @@ MODELS = {
     'biden': Model('Biden', os.path.join(MODEL_PATH, 'biden')),
     'tswift': Model('taylor', os.path.join(MODEL_PATH, 'tswift'))
 }
-F0_METHODS = ['dio', 'parselmouth', 'harvest', 'crepe']
-DEFAULT_F0_METHODS = F0_METHODS.remove('crepe')
+F0_METHODS = ['dio', 'parselmouth', 'harvest', 'crepe', 'crepe-lite']
+DEFAULT_F0_METHODS = ['dio', 'parselmouth', 'harvest']
 
 
-class VoiceConvertor:
+class VoiceConverter:
     def __init__(self, f0_method='dio', auto_predict=False, transpose=0):
         self.svc_path = shutil.which('svc')
         if not self.svc_path:
@@ -51,17 +51,17 @@ class VoiceConvertor:
         env = {
             'PYTORCH_ENABLE_MPS_FALLBACK': '1'
         }
-        subprocess.run(self._build_command(), env=env)
+        subprocess.run(self._build_command(m, vocals_path), env=env)
         os.rename(default_converted_path, converted_path)
 
         return converted_path
     
-    def _build_command()
-        command = f'{self.svc_path} infer -fm {self.f0_method} -s {m.speaker} -m {m.path} -c {os.path.join(m.path, "config.json")} {vocals_path}')
+    def _build_command(self, model, vocals_path):
+        command = f'{self.svc_path} infer -fm {self.f0_method} -s {model.speaker} -m {model.path} -c {os.path.join(model.path, "config.json")} {vocals_path}'
         if not self.auto_predict:
             command += ' -na'
         
         if self.transpose != 0:
-            command += f' -t {self.transpse}'
+            command += f' -t {self.transpose}'
 
         return shlex.split(command)
