@@ -52,9 +52,9 @@ def main():
         converted_path = vc.convert(model, vocals_path)
 
         if transpose != 0:
-            no_vocals_path = audio.transpose(no_vocals_path, transpose)
+            no_vocals_path = audio.transpose(no_vocals_path, int(transpose))
 
-        combined_path = os.path.join(project_root, f'{project_name}_{model}_{m}{"_na" if not auto_predict else ""}.wav')
+        combined_path = os.path.join(project_root, f'{project_name}_{model}_{m}{"_na" if not auto_predict else ""}{"_t" + transpose if transpose != 0 else ""}.wav')
         audio.overlay_audio(converted_path, no_vocals_path, combined_path)
 
         print(f'Results saved to {combined_path}')

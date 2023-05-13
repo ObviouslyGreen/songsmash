@@ -6,6 +6,7 @@ Convert any youtube song (video) to a person of your choice. Pls be ethical. Fol
 pip install requirements.txt
 ```
 Only tested on python 3.10, intel based mac, etc. etc. etc.
+Also need to install ffmpeg and sox
 
 ## Running
 ```

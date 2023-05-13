@@ -2,6 +2,8 @@ import demucs.separate
 import os
 import shlex
 
+from pathlib import Path
+
 class SongSplitter:
     def __init__(self, project_name, model='htdemucs'):
         self.project_name = project_name

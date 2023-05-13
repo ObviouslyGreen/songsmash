@@ -1,4 +1,9 @@
+import os
+import sox
+
+from pathlib import Path
 from pydub import AudioSegment
+
 
 def overlay_audio(path_a, path_b, output_path):
     sound_a = AudioSegment.from_mp3(path_a)
@@ -9,4 +14,12 @@ def overlay_audio(path_a, path_b, output_path):
 
 
 def transpose(audio_path, steps):
-    return audio_path
+    tfm = sox.Transformer()
+    tfm.pitch(steps)
+
+    directory = os.path.dirname(audio_path)
+    path = Path(audio_path)
+    transposed_path = f'{directory}/{path.stem}_t{steps}{path.suffix}'
+    tfm.build_file(audio_path, transposed_path)
+
+    return transposed_path
